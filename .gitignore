@@ -131,4 +131,3 @@ dist
 
 #Google Cloud Application Engine
 app.yaml
-.gcloudignore
