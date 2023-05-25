@@ -1,0 +1,3319 @@
+{
+	"info": {
+		"_postman_id": "8be7b4ec-dfda-4cea-8a6f-ece242b5d1f8",
+		"name": "marina-rest-api",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "20381204"
+	},
+	"item": [
+		{
+			"name": "Create Boat Bad Req: 400",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"400 status code\", function () {\r",
+							"    pm.response.to.have.status(400);\r",
+							"});\r",
+							"\r",
+							"pm.test(\"content is valid\", function () {\r",
+							"    pm.expect(pm.response.json()[\"Error\"]).to.eq(\"The request object does not fulfill the property requirements\");\r",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "{{jwt1}}",
+							"type": "string"
+						}
+					]
+				},
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"name\": \"Bad Boat\",\r\n    \"type\": \"Boat\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{root}}/boats",
+					"host": [
+						"{{root}}"
+					],
+					"path": [
+						"boats"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Create Boat Invalid JWT: 401",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"401 status code\", function () {\r",
+							"    pm.response.to.have.status(401);\r",
+							"});\r",
+							"\r",
+							"pm.test(\"content is valid\", function () {\r",
+							"    pm.expect(pm.response.json()[\"Error\"]).to.eq(\"The request has an invalid JWT\");\r",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "{{invalid_token}}",
+							"type": "string"
+						}
+					]
+				},
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"name\": \"Bad Boat\",\r\n    \"type\": \"Boat\",\r\n    \"length\": 0\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{root}}/boats",
+					"host": [
+						"{{root}}"
+					],
+					"path": [
+						"boats"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Create Boat 1 (User 1): 201",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.environment.set(\"valid_boat_id_1\", pm.response.json()[\"id\"]);\r",
+							"\r",
+							"pm.test(\"201 status code\", function () {\r",
+							"    pm.response.to.have.status(201);\r",
+							"});\r",
+							"\r",
+							"pm.test(\"content is valid\", function () {\r",
+							"    pm.expect(pm.response.json()[\"name\"]).to.eq(\"Boat One\");\r",
+							"    pm.expect(pm.response.json()[\"type\"]).to.eq(\"Boat\");\r",
+							"    pm.expect(pm.response.json()[\"length\"]).to.eq(1);\r",
+							"    pm.expect(pm.response.json()[\"loads\"]).to.deep.equal([]);\r",
+							"    const self_url = pm.environment.get(\"root\") + \"/boats/\" + pm.response.json()[\"id\"];\r",
+							"    pm.expect(pm.response.json()[\"self\"]).to.eq(self_url);\r",
+							"    pm.expect(pm.response.json()[\"owner\"][\"id\"]).to.eq(pm.environment.get(\"user_id1\"));\r",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "{{jwt1}}",
+							"type": "string"
+						}
+					]
+				},
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"name\": \"Boat One\",\r\n    \"type\": \"Boat\",\r\n    \"length\": 1\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{root}}/boats",
+					"host": [
+						"{{root}}"
+					],
+					"path": [
+						"boats"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Create Boat 2 (User 1): 201",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.environment.set(\"valid_boat_id_2\", pm.response.json()[\"id\"]);\r",
+							"\r",
+							"pm.test(\"201 status code\", function () {\r",
+							"    pm.response.to.have.status(201);\r",
+							"});\r",
+							"\r",
+							"pm.test(\"content is valid\", function () {\r",
+							"    pm.expect(pm.response.json()[\"loads\"]).to.deep.equal([]);\r",
+							"    const self_url = pm.environment.get(\"root\") + \"/boats/\" + pm.response.json()[\"id\"];\r",
+							"    pm.expect(pm.response.json()[\"self\"]).to.eq(self_url);\r",
+							"    pm.expect(pm.response.json()[\"owner\"][\"id\"]).to.eq(pm.environment.get(\"user_id1\"));\r",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "{{jwt1}}",
+							"type": "string"
+						}
+					]
+				},
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"name\": \"Boat Two\",\r\n    \"type\": \"Boat\",\r\n    \"length\": 2\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{root}}/boats",
+					"host": [
+						"{{root}}"
+					],
+					"path": [
+						"boats"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Create Boat 3 (User 1): 201",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.environment.set(\"valid_boat_id_3\", pm.response.json()[\"id\"]);\r",
+							"\r",
+							"pm.test(\"201 status code\", function () {\r",
+							"    pm.response.to.have.status(201);\r",
+							"});\r",
+							"\r",
+							"pm.test(\"content is valid\", function () {\r",
+							"    pm.expect(pm.response.json()[\"loads\"]).to.deep.equal([]);\r",
+							"    const self_url = pm.environment.get(\"root\") + \"/boats/\" + pm.response.json()[\"id\"];\r",
+							"    pm.expect(pm.response.json()[\"self\"]).to.eq(self_url);\r",
+							"    pm.expect(pm.response.json()[\"owner\"][\"id\"]).to.eq(pm.environment.get(\"user_id1\"));\r",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "{{jwt1}}",
+							"type": "string"
+						}
+					]
+				},
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"name\": \"Boat Three\",\r\n    \"type\": \"Boat\",\r\n    \"length\": 3\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{root}}/boats",
+					"host": [
+						"{{root}}"
+					],
+					"path": [
+						"boats"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Create Boat 4 (User 1): 201",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.environment.set(\"valid_boat_id_4\", pm.response.json()[\"id\"]);\r",
+							"\r",
+							"pm.test(\"201 status code\", function () {\r",
+							"    pm.response.to.have.status(201);\r",
+							"});\r",
+							"\r",
+							"pm.test(\"content is valid\", function () {\r",
+							"    pm.expect(pm.response.json()[\"loads\"]).to.deep.equal([]);\r",
+							"    const self_url = pm.environment.get(\"root\") + \"/boats/\" + pm.response.json()[\"id\"];\r",
+							"    pm.expect(pm.response.json()[\"self\"]).to.eq(self_url);\r",
+							"    pm.expect(pm.response.json()[\"owner\"][\"id\"]).to.eq(pm.environment.get(\"user_id1\"));\r",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "{{jwt1}}",
+							"type": "string"
+						}
+					]
+				},
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"name\": \"Boat Four\",\r\n    \"type\": \"Boat\",\r\n    \"length\": 4\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{root}}/boats",
+					"host": [
+						"{{root}}"
+					],
+					"path": [
+						"boats"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Create Boat 5  (User 1): 201",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.environment.set(\"valid_boat_id_5\", pm.response.json()[\"id\"]);\r",
+							"\r",
+							"pm.test(\"201 status code\", function () {\r",
+							"    pm.response.to.have.status(201);\r",
+							"});\r",
+							"\r",
+							"pm.test(\"content is valid\", function () {\r",
+							"    pm.expect(pm.response.json()[\"loads\"]).to.deep.equal([]);\r",
+							"    const self_url = pm.environment.get(\"root\") + \"/boats/\" + pm.response.json()[\"id\"];\r",
+							"    pm.expect(pm.response.json()[\"self\"]).to.eq(self_url);\r",
+							"    pm.expect(pm.response.json()[\"owner\"][\"id\"]).to.eq(pm.environment.get(\"user_id1\"));\r",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "{{jwt1}}",
+							"type": "string"
+						}
+					]
+				},
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"name\": \"Boat Five\",\r\n    \"type\": \"Boat\",\r\n    \"length\": 5\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{root}}/boats",
+					"host": [
+						"{{root}}"
+					],
+					"path": [
+						"boats"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Create Boat 6  (User 1): 201",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.environment.set(\"valid_boat_id_6\", pm.response.json()[\"id\"]);\r",
+							"\r",
+							"pm.test(\"201 status code\", function () {\r",
+							"    pm.response.to.have.status(201);\r",
+							"});\r",
+							"\r",
+							"pm.test(\"content is valid\", function () {\r",
+							"    pm.expect(pm.response.json()[\"loads\"]).to.deep.equal([]);\r",
+							"    const self_url = pm.environment.get(\"root\") + \"/boats/\" + pm.response.json()[\"id\"];\r",
+							"    pm.expect(pm.response.json()[\"self\"]).to.eq(self_url);\r",
+							"    pm.expect(pm.response.json()[\"owner\"][\"id\"]).to.eq(pm.environment.get(\"user_id1\"));\r",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "{{jwt1}}",
+							"type": "string"
+						}
+					]
+				},
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"name\": \"Boat Six\",\r\n    \"type\": \"Boat\",\r\n    \"length\": 6\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{root}}/boats",
+					"host": [
+						"{{root}}"
+					],
+					"path": [
+						"boats"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Create Boat 7 (User 2): 201",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.environment.set(\"valid_boat_id_7\", pm.response.json()[\"id\"]);\r",
+							"\r",
+							"pm.test(\"201 status code\", function () {\r",
+							"    pm.response.to.have.status(201);\r",
+							"});\r",
+							"\r",
+							"pm.test(\"content is valid\", function () {\r",
+							"    pm.expect(pm.response.json()[\"loads\"]).to.deep.equal([]);\r",
+							"    const self_url = pm.environment.get(\"root\") + \"/boats/\" + pm.response.json()[\"id\"];\r",
+							"    pm.expect(pm.response.json()[\"self\"]).to.eq(self_url);\r",
+							"    pm.expect(pm.response.json()[\"owner\"][\"id\"]).to.eq(pm.environment.get(\"user_id2\"));\r",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "{{jwt2}}",
+							"type": "string"
+						}
+					]
+				},
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"name\": \"Boat Seven\",\r\n    \"type\": \"Boat\",\r\n    \"length\": 7\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{root}}/boats",
+					"host": [
+						"{{root}}"
+					],
+					"path": [
+						"boats"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Get all Boats Invalid JWT: 401",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"401 status code\", function () {\r",
+							"    pm.response.to.have.status(401);\r",
+							"});\r",
+							"\r",
+							"pm.test(\"content is valid\", function () {\r",
+							"    pm.expect(pm.response.json()[\"Error\"]).to.eq(\"The request has an invalid JWT\");\r",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "{{invalid_token}}",
+							"type": "string"
+						}
+					]
+				},
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "{{root}}/boats",
+					"host": [
+						"{{root}}"
+					],
+					"path": [
+						"boats"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Get all Boats MIME: 406",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"406 status code\", function () {\r",
+							"    pm.response.to.have.status(406);\r",
+							"});\r",
+							"\r",
+							"pm.test(\"content is valid\", function () {\r",
+							"    pm.expect(pm.response.json()[\"Error\"]).to.eq(\"Requested MIME type not supported by endpoint\");\r",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"protocolProfileBehavior": {
+				"disabledSystemHeaders": {
+					"accept": true
+				}
+			},
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "{{jwt2}}",
+							"type": "string"
+						}
+					]
+				},
+				"method": "GET",
+				"header": [
+					{
+						"key": "Accept",
+						"value": "text/html",
+						"type": "text"
+					}
+				],
+				"url": {
+					"raw": "{{root}}/boats",
+					"host": [
+						"{{root}}"
+					],
+					"path": [
+						"boats"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Get all Boats (User 1): 200",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"200 status code\", function () {\r",
+							"    //Check for success 200 response code\r",
+							"    pm.response.to.have.status(200);\r",
+							"});\r",
+							"\r",
+							"const boats = pm.response.json()[\"boats\"];\r",
+							"\r",
+							"pm.test(\"content is valid\", function () {\r",
+							"    //Check if the content is valid\r",
+							"    pm.expect(pm.response.json()[\"total\"]).to.eq(5);\r",
+							"    pm.expect(boats.length).to.eq(5);\r",
+							"    pm.expect(pm.response.json()).to.have.property(\"next\");\r",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "{{jwt1}}",
+							"type": "string"
+						}
+					]
+				},
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "{{root}}/boats",
+					"host": [
+						"{{root}}"
+					],
+					"path": [
+						"boats"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Get all Boats (User 2): 200",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"200 status code\", function () {\r",
+							"    //Check for success 200 response code\r",
+							"    pm.response.to.have.status(200);\r",
+							"});\r",
+							"\r",
+							"const boats = pm.response.json()[\"boats\"];\r",
+							"\r",
+							"pm.test(\"content is valid\", function () {\r",
+							"    //Check if the content is valid\r",
+							"    pm.expect(pm.response.json()[\"total\"]).to.eq(1);\r",
+							"    pm.expect(boats.length).to.eq(1);\r",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "{{jwt2}}",
+							"type": "string"
+						}
+					]
+				},
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "{{root}}/boats",
+					"host": [
+						"{{root}}"
+					],
+					"path": [
+						"boats"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Get Boat 6 Invalid JWT: 401",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"401 status code\", function () {\r",
+							"    pm.response.to.have.status(401);\r",
+							"});\r",
+							"\r",
+							"pm.test(\"content is valid\", function () {\r",
+							"    pm.expect(pm.response.json()[\"Error\"]).to.eq(\"The request has an invalid JWT\");\r",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "{{invalid_token}}",
+							"type": "string"
+						}
+					]
+				},
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "{{root}}/boats/{{valid_boat_id_6}}",
+					"host": [
+						"{{root}}"
+					],
+					"path": [
+						"boats",
+						"{{valid_boat_id_6}}"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Get Boat 6 (User 2): 403",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"403 status code\", function () {\r",
+							"    pm.response.to.have.status(403);\r",
+							"});\r",
+							"\r",
+							"pm.test(\"content is valid\", function () {\r",
+							"    pm.expect(pm.response.json()[\"Error\"]).to.eq(\"User does not own boat with this boat_id\");\r",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "{{jwt2}}",
+							"type": "string"
+						}
+					]
+				},
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "{{root}}/boats/{{valid_boat_id_6}}",
+					"host": [
+						"{{root}}"
+					],
+					"path": [
+						"boats",
+						"{{valid_boat_id_6}}"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Get Boat DNE: 404",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"404 status code\", function () {\r",
+							"    pm.response.to.have.status(404);\r",
+							"});\r",
+							"\r",
+							"pm.test(\"content is valid\", function () {\r",
+							"    pm.expect(pm.response.json()[\"Error\"]).to.eq(\"No boat with this boat_id exists\");\r",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "{{jwt2}}",
+							"type": "string"
+						}
+					]
+				},
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "{{root}}/boats/{{invalid_boat_id}}",
+					"host": [
+						"{{root}}"
+					],
+					"path": [
+						"boats",
+						"{{invalid_boat_id}}"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Get Boat 6 MIME: 406",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"406 status code\", function () {\r",
+							"    pm.response.to.have.status(406);\r",
+							"});\r",
+							"\r",
+							"pm.test(\"content is valid\", function () {\r",
+							"    pm.expect(pm.response.json()[\"Error\"]).to.eq(\"Requested MIME type not supported by endpoint\");\r",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"protocolProfileBehavior": {
+				"disabledSystemHeaders": {
+					"accept": true
+				}
+			},
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "{{jwt2}}",
+							"type": "string"
+						}
+					]
+				},
+				"method": "GET",
+				"header": [
+					{
+						"key": "Accept",
+						"value": "text/html",
+						"type": "text"
+					}
+				],
+				"url": {
+					"raw": "{{root}}/boats/{{valid_boat_id_6}}",
+					"host": [
+						"{{root}}"
+					],
+					"path": [
+						"boats",
+						"{{valid_boat_id_6}}"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Get Boat 6 (User 1): 200",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"200 status code\", function () {\r",
+							"    //Check for success 200 response code\r",
+							"    pm.response.to.have.status(200);\r",
+							"});\r",
+							"\r",
+							"pm.test(\"content is valid\", function () {\r",
+							"    pm.expect(pm.response.json()[\"name\"]).to.eq(\"Boat Six\");\r",
+							"    pm.expect(pm.response.json()[\"type\"]).to.eq(\"Boat\");\r",
+							"    pm.expect(pm.response.json()[\"length\"]).to.eq(6);\r",
+							"    pm.expect(pm.response.json()[\"loads\"]).to.deep.equal([]);\r",
+							"    const self_url = pm.environment.get(\"root\") + \"/boats/\" + pm.response.json()[\"id\"];\r",
+							"    pm.expect(pm.response.json()[\"self\"]).to.eq(self_url);\r",
+							"    pm.expect(pm.response.json()[\"owner\"][\"id\"]).to.eq(pm.environment.get(\"user_id1\"));\r",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "{{jwt1}}",
+							"type": "string"
+						}
+					]
+				},
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "{{root}}/boats/{{valid_boat_id_6}}",
+					"host": [
+						"{{root}}"
+					],
+					"path": [
+						"boats",
+						"{{valid_boat_id_6}}"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Get Boat 7 (User 2): 200",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"200 status code\", function () {\r",
+							"    //Check for success 200 response code\r",
+							"    pm.response.to.have.status(200);\r",
+							"});\r",
+							"\r",
+							"pm.test(\"content is valid\", function () {\r",
+							"    pm.expect(pm.response.json()[\"name\"]).to.eq(\"Boat Seven\");\r",
+							"    pm.expect(pm.response.json()[\"type\"]).to.eq(\"Boat\");\r",
+							"    pm.expect(pm.response.json()[\"length\"]).to.eq(7);\r",
+							"    pm.expect(pm.response.json()[\"loads\"]).to.deep.equal([]);\r",
+							"    const self_url = pm.environment.get(\"root\") + \"/boats/\" + pm.response.json()[\"id\"];\r",
+							"    pm.expect(pm.response.json()[\"self\"]).to.eq(self_url);\r",
+							"    pm.expect(pm.response.json()[\"owner\"][\"id\"]).to.eq(pm.environment.get(\"user_id2\"));\r",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "{{jwt2}}",
+							"type": "string"
+						}
+					]
+				},
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "{{root}}/boats/{{valid_boat_id_7}}",
+					"host": [
+						"{{root}}"
+					],
+					"path": [
+						"boats",
+						"{{valid_boat_id_7}}"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Delete Boat 6 Invalid JWT: 401",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"401 status code\", function () {\r",
+							"    pm.response.to.have.status(401);\r",
+							"});\r",
+							"\r",
+							"pm.test(\"content is valid\", function () {\r",
+							"    pm.expect(pm.response.json()[\"Error\"]).to.eq(\"The request has an invalid JWT\");\r",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "{{invalid_token}}",
+							"type": "string"
+						}
+					]
+				},
+				"method": "DELETE",
+				"header": [],
+				"url": {
+					"raw": "{{root}}/boats/{{valid_boat_id_6}}",
+					"host": [
+						"{{root}}"
+					],
+					"path": [
+						"boats",
+						"{{valid_boat_id_6}}"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Delete Boat 6 (User 2): 403",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"403 status code\", function () {\r",
+							"    pm.response.to.have.status(403);\r",
+							"});\r",
+							"\r",
+							"pm.test(\"content is valid\", function () {\r",
+							"    pm.expect(pm.response.json()[\"Error\"]).to.eq(\"User does not own boat with this boat_id\");\r",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "{{jwt2}}",
+							"type": "string"
+						}
+					]
+				},
+				"method": "DELETE",
+				"header": [],
+				"url": {
+					"raw": "{{root}}/boats/{{valid_boat_id_6}}",
+					"host": [
+						"{{root}}"
+					],
+					"path": [
+						"boats",
+						"{{valid_boat_id_6}}"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Delete Boat DNE: 404",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"404 status code\", function () {\r",
+							"    pm.response.to.have.status(404);\r",
+							"});\r",
+							"\r",
+							"pm.test(\"content is valid\", function () {\r",
+							"    pm.expect(pm.response.json()[\"Error\"]).to.eq(\"No boat with this boat_id exists\");\r",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "{{jwt2}}",
+							"type": "string"
+						}
+					]
+				},
+				"method": "DELETE",
+				"header": [],
+				"url": {
+					"raw": "{{root}}/boats/{{invalid_boat_id}}",
+					"host": [
+						"{{root}}"
+					],
+					"path": [
+						"boats",
+						"{{invalid_boat_id}}"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Delete Boats: 405",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"405 status code\", function () {\r",
+							"    pm.response.to.have.status(405);\r",
+							"});\r",
+							"\r",
+							"const resHeaders = pm.response.headers.all();\r",
+							"console.log(resHeaders)\r",
+							"\r",
+							"pm.test(\"content is valid\", function () {\r",
+							"    pm.expect(pm.response.json()[\"Error\"]).to.eq(\"Invalid method\");\r",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "{{jwt2}}",
+							"type": "string"
+						}
+					]
+				},
+				"method": "DELETE",
+				"header": [],
+				"url": {
+					"raw": "{{root}}/boats",
+					"host": [
+						"{{root}}"
+					],
+					"path": [
+						"boats"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Delete Boat 6 (User 1): 204",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"204 status code\", function () {\r",
+							"    pm.response.to.have.status(204);\r",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "{{jwt1}}",
+							"type": "string"
+						}
+					]
+				},
+				"method": "DELETE",
+				"header": [],
+				"url": {
+					"raw": "{{root}}/boats/{{valid_boat_id_6}}",
+					"host": [
+						"{{root}}"
+					],
+					"path": [
+						"boats",
+						"{{valid_boat_id_6}}"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Get all Boats afer Delete (User 1): 200",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"200 status code\", function () {\r",
+							"    //Check for success 200 response code\r",
+							"    pm.response.to.have.status(200);\r",
+							"});\r",
+							"\r",
+							"const boats = pm.response.json()[\"boats\"];\r",
+							"\r",
+							"pm.test(\"content is valid\", function () {\r",
+							"    //Check if the content is valid\r",
+							"    pm.expect(pm.response.json()[\"total\"]).to.eq(5);\r",
+							"    pm.expect(boats.length).to.eq(5);\r",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "{{jwt1}}",
+							"type": "string"
+						}
+					]
+				},
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "{{root}}/boats",
+					"host": [
+						"{{root}}"
+					],
+					"path": [
+						"boats"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Delete Boat 7 (User 2): 204",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"204 status code\", function () {\r",
+							"    pm.response.to.have.status(204);\r",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "{{jwt2}}",
+							"type": "string"
+						}
+					]
+				},
+				"method": "DELETE",
+				"header": [],
+				"url": {
+					"raw": "{{root}}/boats/{{valid_boat_id_7}}",
+					"host": [
+						"{{root}}"
+					],
+					"path": [
+						"boats",
+						"{{valid_boat_id_7}}"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Get all Boats after Delete (User 2): 200",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"200 status code\", function () {\r",
+							"    //Check for success 200 response code\r",
+							"    pm.response.to.have.status(200);\r",
+							"});\r",
+							"\r",
+							"pm.test(\"content is valid\", function () {\r",
+							"    //Check if the content is valid\r",
+							"    pm.expect(pm.response.json()[\"boats\"]).to.be.empty;\r",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "{{jwt2}}",
+							"type": "string"
+						}
+					]
+				},
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "{{root}}/boats",
+					"host": [
+						"{{root}}"
+					],
+					"path": [
+						"boats"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Create Load Bad Req: 400",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"400 status code\", function () {\r",
+							"    pm.response.to.have.status(400);\r",
+							"});\r",
+							"\r",
+							"pm.test(\"content is valid\", function () {\r",
+							"    pm.expect(pm.response.json()[\"Error\"]).to.eq(\"The request object does not fulfill the property requirements\");\r",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "{{jwt2}}",
+							"type": "string"
+						}
+					]
+				},
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"volume\": 0,\r\n    \"item\": \"Bad items\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{root}}/loads",
+					"host": [
+						"{{root}}"
+					],
+					"path": [
+						"loads"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Create Load Invalid JWT: 401",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"401 status code\", function () {\r",
+							"    pm.response.to.have.status(401);\r",
+							"});\r",
+							"\r",
+							"pm.test(\"content is valid\", function () {\r",
+							"    pm.expect(pm.response.json()[\"Error\"]).to.eq(\"The request has an invalid JWT\");\r",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "{{invalid_token}}",
+							"type": "string"
+						}
+					]
+				},
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"volume\": 0,\r\n    \"item\": \"Bad items\",\r\n    \"weight\": 0\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{root}}/loads",
+					"host": [
+						"{{root}}"
+					],
+					"path": [
+						"loads"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Create Load 1: 201",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.environment.set(\"valid_load_id_1\", pm.response.json()[\"id\"]);\r",
+							"\r",
+							"pm.test(\"201 status code\", function () {\r",
+							"    pm.response.to.have.status(201);\r",
+							"});\r",
+							"\r",
+							"pm.test(\"content is valid\", function () {\r",
+							"    pm.expect(pm.response.json()[\"volume\"]).to.eq(1);\r",
+							"    pm.expect(pm.response.json()[\"weight\"]).to.eq(1);\r",
+							"    pm.expect(pm.response.json()[\"item\"]).to.eq(\"Items\");\r",
+							"    pm.expect(pm.response.json()[\"boat\"]).to.eq(null);\r",
+							"    const self_url = pm.environment.get(\"root\") + \"/loads/\" + pm.response.json()[\"id\"];\r",
+							"    pm.expect(pm.response.json()[\"self\"]).to.eq(self_url);\r",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "{{jwt2}}",
+							"type": "string"
+						}
+					]
+				},
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"volume\": 1,\r\n    \"item\": \"Items\",\r\n    \"weight\": 1\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{root}}/loads",
+					"host": [
+						"{{root}}"
+					],
+					"path": [
+						"loads"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Create Load 2: 201",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.environment.set(\"valid_load_id_2\", pm.response.json()[\"id\"]);\r",
+							"\r",
+							"pm.test(\"201 status code\", function () {\r",
+							"    pm.response.to.have.status(201);\r",
+							"});\r",
+							"\r",
+							"pm.test(\"content is valid\", function () {\r",
+							"    pm.expect(pm.response.json()[\"volume\"]).to.eq(2);\r",
+							"    pm.expect(pm.response.json()[\"weight\"]).to.eq(2);\r",
+							"    pm.expect(pm.response.json()[\"item\"]).to.eq(\"Items\");\r",
+							"    pm.expect(pm.response.json()[\"boat\"]).to.eq(null);\r",
+							"    const self_url = pm.environment.get(\"root\") + \"/loads/\" + pm.response.json()[\"id\"];\r",
+							"    pm.expect(pm.response.json()[\"self\"]).to.eq(self_url);\r",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "{{jwt2}}",
+							"type": "string"
+						}
+					]
+				},
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"volume\": 2,\r\n    \"item\": \"Items\",\r\n    \"weight\": 2\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{root}}/loads",
+					"host": [
+						"{{root}}"
+					],
+					"path": [
+						"loads"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Create Load 3: 201",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.environment.set(\"valid_load_id_3\", pm.response.json()[\"id\"]);\r",
+							"\r",
+							"pm.test(\"201 status code\", function () {\r",
+							"    pm.response.to.have.status(201);\r",
+							"});\r",
+							"\r",
+							"pm.test(\"content is valid\", function () {\r",
+							"    pm.expect(pm.response.json()[\"volume\"]).to.eq(3);\r",
+							"    pm.expect(pm.response.json()[\"weight\"]).to.eq(3);\r",
+							"    pm.expect(pm.response.json()[\"item\"]).to.eq(\"Items\");\r",
+							"    pm.expect(pm.response.json()[\"boat\"]).to.eq(null);\r",
+							"    const self_url = pm.environment.get(\"root\") + \"/loads/\" + pm.response.json()[\"id\"];\r",
+							"    pm.expect(pm.response.json()[\"self\"]).to.eq(self_url);\r",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "{{jwt2}}",
+							"type": "string"
+						}
+					]
+				},
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"volume\": 3,\r\n    \"item\": \"Items\",\r\n    \"weight\": 3\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{root}}/loads",
+					"host": [
+						"{{root}}"
+					],
+					"path": [
+						"loads"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Create Load 4: 201",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.environment.set(\"valid_load_id_4\", pm.response.json()[\"id\"]);\r",
+							"\r",
+							"pm.test(\"201 status code\", function () {\r",
+							"    pm.response.to.have.status(201);\r",
+							"});\r",
+							"\r",
+							"pm.test(\"content is valid\", function () {\r",
+							"    pm.expect(pm.response.json()[\"volume\"]).to.eq(4);\r",
+							"    pm.expect(pm.response.json()[\"weight\"]).to.eq(4);\r",
+							"    pm.expect(pm.response.json()[\"item\"]).to.eq(\"Items\");\r",
+							"    pm.expect(pm.response.json()[\"boat\"]).to.eq(null);\r",
+							"    const self_url = pm.environment.get(\"root\") + \"/loads/\" + pm.response.json()[\"id\"];\r",
+							"    pm.expect(pm.response.json()[\"self\"]).to.eq(self_url);\r",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "{{jwt2}}",
+							"type": "string"
+						}
+					]
+				},
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"volume\": 4,\r\n    \"item\": \"Items\",\r\n    \"weight\": 4\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{root}}/loads",
+					"host": [
+						"{{root}}"
+					],
+					"path": [
+						"loads"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Create Load 5: 201",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.environment.set(\"valid_load_id_5\", pm.response.json()[\"id\"]);\r",
+							"\r",
+							"pm.test(\"201 status code\", function () {\r",
+							"    pm.response.to.have.status(201);\r",
+							"});\r",
+							"\r",
+							"pm.test(\"content is valid\", function () {\r",
+							"    pm.expect(pm.response.json()[\"volume\"]).to.eq(5);\r",
+							"    pm.expect(pm.response.json()[\"weight\"]).to.eq(5);\r",
+							"    pm.expect(pm.response.json()[\"item\"]).to.eq(\"Items\");\r",
+							"    pm.expect(pm.response.json()[\"boat\"]).to.eq(null);\r",
+							"    const self_url = pm.environment.get(\"root\") + \"/loads/\" + pm.response.json()[\"id\"];\r",
+							"    pm.expect(pm.response.json()[\"self\"]).to.eq(self_url);\r",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "{{jwt2}}",
+							"type": "string"
+						}
+					]
+				},
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"volume\": 5,\r\n    \"item\": \"Items\",\r\n    \"weight\": 5\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{root}}/loads",
+					"host": [
+						"{{root}}"
+					],
+					"path": [
+						"loads"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Create Load 6: 201",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.environment.set(\"valid_load_id_6\", pm.response.json()[\"id\"]);\r",
+							"\r",
+							"pm.test(\"201 status code\", function () {\r",
+							"    pm.response.to.have.status(201);\r",
+							"});\r",
+							"\r",
+							"pm.test(\"content is valid\", function () {\r",
+							"    pm.expect(pm.response.json()[\"volume\"]).to.eq(6);\r",
+							"    pm.expect(pm.response.json()[\"weight\"]).to.eq(6);\r",
+							"    pm.expect(pm.response.json()[\"item\"]).to.eq(\"Items\");\r",
+							"    pm.expect(pm.response.json()[\"boat\"]).to.eq(null);\r",
+							"    const self_url = pm.environment.get(\"root\") + \"/loads/\" + pm.response.json()[\"id\"];\r",
+							"    pm.expect(pm.response.json()[\"self\"]).to.eq(self_url);\r",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "{{jwt2}}",
+							"type": "string"
+						}
+					]
+				},
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"volume\": 6,\r\n    \"item\": \"Items\",\r\n    \"weight\": 6\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{root}}/loads",
+					"host": [
+						"{{root}}"
+					],
+					"path": [
+						"loads"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Get all Loads Invalid JWT: 401",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"401 status code\", function () {\r",
+							"    pm.response.to.have.status(401);\r",
+							"});\r",
+							"\r",
+							"pm.test(\"content is valid\", function () {\r",
+							"    pm.expect(pm.response.json()[\"Error\"]).to.eq(\"The request has an invalid JWT\");\r",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "{{invalid_token}}",
+							"type": "string"
+						}
+					]
+				},
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "{{root}}/loads",
+					"host": [
+						"{{root}}"
+					],
+					"path": [
+						"loads"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Get all Loads MIME: 406",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"406 status code\", function () {\r",
+							"    pm.response.to.have.status(406);\r",
+							"});\r",
+							"\r",
+							"pm.test(\"content is valid\", function () {\r",
+							"    pm.expect(pm.response.json()[\"Error\"]).to.eq(\"Requested MIME type not supported by endpoint\");\r",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"protocolProfileBehavior": {
+				"disabledSystemHeaders": {
+					"accept": true
+				}
+			},
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "{{jwt2}}",
+							"type": "string"
+						}
+					]
+				},
+				"method": "GET",
+				"header": [
+					{
+						"key": "Accept",
+						"value": "text/html",
+						"type": "text"
+					}
+				],
+				"url": {
+					"raw": "{{root}}/loads",
+					"host": [
+						"{{root}}"
+					],
+					"path": [
+						"loads"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Get all Loads: 200",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"200 status code\", function () {\r",
+							"    //Check for success 200 response code\r",
+							"    pm.response.to.have.status(200);\r",
+							"});\r",
+							"\r",
+							"const loads = pm.response.json()[\"loads\"];\r",
+							"\r",
+							"pm.test(\"content is valid\", function () {\r",
+							"    //Check if the content is valid\r",
+							"    pm.expect(pm.response.json()[\"total\"]).to.eq(5);\r",
+							"    pm.expect(loads.length).to.eq(5);\r",
+							"    pm.expect(pm.response.json()).to.have.property(\"next\");\r",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "{{jwt2}}",
+							"type": "string"
+						}
+					]
+				},
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "{{root}}/loads",
+					"host": [
+						"{{root}}"
+					],
+					"path": [
+						"loads"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Get Load 6 Invalid JWT: 401",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"401 status code\", function () {\r",
+							"    pm.response.to.have.status(401);\r",
+							"});\r",
+							"\r",
+							"pm.test(\"content is valid\", function () {\r",
+							"    pm.expect(pm.response.json()[\"Error\"]).to.eq(\"The request has an invalid JWT\");\r",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "{{invalid_token}}",
+							"type": "string"
+						}
+					]
+				},
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "{{root}}/loads/{{valid_load_id_6}}",
+					"host": [
+						"{{root}}"
+					],
+					"path": [
+						"loads",
+						"{{valid_load_id_6}}"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Get Load DNE: 404",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"404 status code\", function () {\r",
+							"    pm.response.to.have.status(404);\r",
+							"});\r",
+							"\r",
+							"pm.test(\"content is valid\", function () {\r",
+							"    pm.expect(pm.response.json()[\"Error\"]).to.eq(\"No load with this load_id exists\");\r",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "{{jwt2}}",
+							"type": "string"
+						}
+					]
+				},
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "{{root}}/loads/{{invalid_load_id}}",
+					"host": [
+						"{{root}}"
+					],
+					"path": [
+						"loads",
+						"{{invalid_load_id}}"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Get Load 6 MIME: 406",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"406 status code\", function () {\r",
+							"    pm.response.to.have.status(406);\r",
+							"});\r",
+							"\r",
+							"pm.test(\"content is valid\", function () {\r",
+							"    pm.expect(pm.response.json()[\"Error\"]).to.eq(\"Requested MIME type not supported by endpoint\");\r",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"protocolProfileBehavior": {
+				"disabledSystemHeaders": {
+					"accept": true
+				}
+			},
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "{{jwt2}}",
+							"type": "string"
+						}
+					]
+				},
+				"method": "GET",
+				"header": [
+					{
+						"key": "Accept",
+						"value": "text/html",
+						"type": "text"
+					}
+				],
+				"url": {
+					"raw": "{{root}}/loads/{{valid_load_id_6}}",
+					"host": [
+						"{{root}}"
+					],
+					"path": [
+						"loads",
+						"{{valid_load_id_6}}"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Get Load 6: 200",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"200 status code\", function () {\r",
+							"    //Check for success 200 response code\r",
+							"    pm.response.to.have.status(200);\r",
+							"});\r",
+							"\r",
+							"pm.test(\"content is valid\", function () {\r",
+							"    pm.expect(pm.response.json()[\"volume\"]).to.eq(6);\r",
+							"    pm.expect(pm.response.json()[\"weight\"]).to.eq(6);\r",
+							"    pm.expect(pm.response.json()[\"item\"]).to.eq(\"Items\");\r",
+							"    pm.expect(pm.response.json()[\"boat\"]).to.eq(null);\r",
+							"    const self_url = pm.environment.get(\"root\") + \"/loads/\" + pm.response.json()[\"id\"];\r",
+							"    pm.expect(pm.response.json()[\"self\"]).to.eq(self_url);\r",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "{{jwt2}}",
+							"type": "string"
+						}
+					]
+				},
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "{{root}}/loads/{{valid_load_id_6}}",
+					"host": [
+						"{{root}}"
+					],
+					"path": [
+						"loads",
+						"{{valid_load_id_6}}"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Get Load 6 Invalid JWT: 401",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"401 status code\", function () {\r",
+							"    pm.response.to.have.status(401);\r",
+							"});\r",
+							"\r",
+							"pm.test(\"content is valid\", function () {\r",
+							"    pm.expect(pm.response.json()[\"Error\"]).to.eq(\"The request has an invalid JWT\");\r",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "{{invalid_token}}",
+							"type": "string"
+						}
+					]
+				},
+				"method": "DELETE",
+				"header": [],
+				"url": {
+					"raw": "{{root}}/loads/{{valid_load_id_6}}",
+					"host": [
+						"{{root}}"
+					],
+					"path": [
+						"loads",
+						"{{valid_load_id_6}}"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Get Load DNE: 404",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"404 status code\", function () {\r",
+							"    pm.response.to.have.status(404);\r",
+							"});\r",
+							"\r",
+							"pm.test(\"content is valid\", function () {\r",
+							"    pm.expect(pm.response.json()[\"Error\"]).to.eq(\"No load with this load_id exists\");\r",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "{{jwt2}}",
+							"type": "string"
+						}
+					]
+				},
+				"method": "DELETE",
+				"header": [],
+				"url": {
+					"raw": "{{root}}/loads/{{invalid_load_id}}",
+					"host": [
+						"{{root}}"
+					],
+					"path": [
+						"loads",
+						"{{invalid_load_id}}"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Delete Loads: 405",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"405 status code\", function () {\r",
+							"    pm.response.to.have.status(405);\r",
+							"});\r",
+							"\r",
+							"const resHeaders = pm.response.headers.all();\r",
+							"\r",
+							"pm.test(\"content is valid\", function () {\r",
+							"    pm.expect(pm.response.json()[\"Error\"]).to.eq(\"Invalid method\");\r",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "{{jwt2}}",
+							"type": "string"
+						}
+					]
+				},
+				"method": "DELETE",
+				"header": [],
+				"url": {
+					"raw": "{{root}}/loads",
+					"host": [
+						"{{root}}"
+					],
+					"path": [
+						"loads"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Delete Load 6: 204",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"204 status code\", function () {\r",
+							"    pm.response.to.have.status(204);\r",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "{{jwt2}}",
+							"type": "string"
+						}
+					]
+				},
+				"method": "DELETE",
+				"header": [],
+				"url": {
+					"raw": "{{root}}/loads/{{valid_load_id_6}}",
+					"host": [
+						"{{root}}"
+					],
+					"path": [
+						"loads",
+						"{{valid_load_id_6}}"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Get Load 6 after Delete: 404",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"404 status code\", function () {\r",
+							"    //Check for success 200 response code\r",
+							"    pm.response.to.have.status(404);\r",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "{{jwt2}}",
+							"type": "string"
+						}
+					]
+				},
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "{{root}}/loads/{{valid_load_id_6}}",
+					"host": [
+						"{{root}}"
+					],
+					"path": [
+						"loads",
+						"{{valid_load_id_6}}"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Add Load 5 to Boat 5 Invalid JWT: 401",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"401 status code\", function () {\r",
+							"    pm.response.to.have.status(401);\r",
+							"});\r",
+							"\r",
+							"pm.test(\"content is valid\", function () {\r",
+							"    pm.expect(pm.response.json()[\"Error\"]).to.eq(\"The request has an invalid JWT\");\r",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "{{invalid_token}}",
+							"type": "string"
+						}
+					]
+				},
+				"method": "PUT",
+				"header": [],
+				"url": {
+					"raw": "{{root}}/boats/{{valid_boat_id_5}}/loads/{{valid_load_id_5}}",
+					"host": [
+						"{{root}}"
+					],
+					"path": [
+						"boats",
+						"{{valid_boat_id_5}}",
+						"loads",
+						"{{valid_load_id_5}}"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Add Load 5 to Boat 5 (User 2): 403",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"403 status code\", function () {\r",
+							"    pm.response.to.have.status(403);\r",
+							"});\r",
+							"\r",
+							"pm.test(\"content is valid\", function () {\r",
+							"    pm.expect(pm.response.json()[\"Error\"]).to.eq(\"User does not own boat with this boat_id\");\r",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "{{jwt2}}",
+							"type": "string"
+						}
+					]
+				},
+				"method": "PUT",
+				"header": [],
+				"url": {
+					"raw": "{{root}}/boats/{{valid_boat_id_5}}/loads/{{valid_load_id_5}}",
+					"host": [
+						"{{root}}"
+					],
+					"path": [
+						"boats",
+						"{{valid_boat_id_5}}",
+						"loads",
+						"{{valid_load_id_5}}"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Add Load DNE to Boat DNE: 404",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"404 status code\", function () {\r",
+							"    pm.response.to.have.status(404);\r",
+							"});\r",
+							"\r",
+							"pm.test(\"content is valid\", function () {\r",
+							"    pm.expect(pm.response.json()[\"Error\"]).to.eq(\"The specified boat and/or load does not exist. The load may also already be on another boat\");\r",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "{{jwt2}}",
+							"type": "string"
+						}
+					]
+				},
+				"method": "PUT",
+				"header": [],
+				"url": {
+					"raw": "{{root}}/boats/{{invalid_boat_id}}/loads/{{invalid_load_id}}",
+					"host": [
+						"{{root}}"
+					],
+					"path": [
+						"boats",
+						"{{invalid_boat_id}}",
+						"loads",
+						"{{invalid_load_id}}"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Get Boat 5 (User 1): 200",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"200 status code\", function () {\r",
+							"    //Check for success 200 response code\r",
+							"    pm.response.to.have.status(200);\r",
+							"});\r",
+							"\r",
+							"pm.test(\"content is valid\", function () {\r",
+							"    pm.expect(pm.response.json()[\"name\"]).to.eq(\"Boat Five\");\r",
+							"    pm.expect(pm.response.json()[\"type\"]).to.eq(\"Boat\");\r",
+							"    pm.expect(pm.response.json()[\"length\"]).to.eq(5);\r",
+							"    pm.expect(pm.response.json()[\"loads\"]).to.deep.equal([]);\r",
+							"    const self_url = pm.environment.get(\"root\") + \"/boats/\" + pm.response.json()[\"id\"];\r",
+							"    pm.expect(pm.response.json()[\"self\"]).to.eq(self_url);\r",
+							"    pm.expect(pm.response.json()[\"owner\"][\"id\"]).to.eq(pm.environment.get(\"user_id1\"));\r",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "{{jwt1}}",
+							"type": "string"
+						}
+					]
+				},
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "{{root}}/boats/{{valid_boat_id_5}}",
+					"host": [
+						"{{root}}"
+					],
+					"path": [
+						"boats",
+						"{{valid_boat_id_5}}"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Get Load 5: 200",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"200 status code\", function () {\r",
+							"    //Check for success 200 response code\r",
+							"    pm.response.to.have.status(200);\r",
+							"});\r",
+							"\r",
+							"pm.test(\"content is valid\", function () {\r",
+							"    pm.expect(pm.response.json()[\"volume\"]).to.eq(5);\r",
+							"    pm.expect(pm.response.json()[\"weight\"]).to.eq(5);\r",
+							"    pm.expect(pm.response.json()[\"item\"]).to.eq(\"Items\");\r",
+							"    pm.expect(pm.response.json()[\"boat\"]).to.eq(null);\r",
+							"    const self_url = pm.environment.get(\"root\") + \"/loads/\" + pm.response.json()[\"id\"];\r",
+							"    pm.expect(pm.response.json()[\"self\"]).to.eq(self_url);\r",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "{{jwt1}}",
+							"type": "string"
+						}
+					]
+				},
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "{{root}}/loads/{{valid_load_id_5}}",
+					"host": [
+						"{{root}}"
+					],
+					"path": [
+						"loads",
+						"{{valid_load_id_5}}"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Add Load 5 to Boat 5 (User 1): 204",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"204 status code\", function () {\r",
+							"    pm.response.to.have.status(204);\r",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "{{jwt1}}",
+							"type": "string"
+						}
+					]
+				},
+				"method": "PUT",
+				"header": [],
+				"url": {
+					"raw": "{{root}}/boats/{{valid_boat_id_5}}/loads/{{valid_load_id_5}}",
+					"host": [
+						"{{root}}"
+					],
+					"path": [
+						"boats",
+						"{{valid_boat_id_5}}",
+						"loads",
+						"{{valid_load_id_5}}"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Get Boat 5 with Load (User 1): 200",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"200 status code\", function () {\r",
+							"    //Check for success 200 response code\r",
+							"    pm.response.to.have.status(200);\r",
+							"});\r",
+							"\r",
+							"pm.test(\"content is valid\", function () {\r",
+							"    pm.expect(pm.response.json()[\"name\"]).to.eq(\"Boat Five\");\r",
+							"    pm.expect(pm.response.json()[\"type\"]).to.eq(\"Boat\");\r",
+							"    pm.expect(pm.response.json()[\"length\"]).to.eq(5);\r",
+							"    const self_url = pm.environment.get(\"root\") + \"/boats/\" + pm.response.json()[\"id\"];\r",
+							"    const load_url = pm.environment.get(\"root\") + \"/loads/\" + pm.environment.get(\"valid_load_id_5\");\r",
+							"    pm.expect(pm.response.json()[\"loads\"]).to.deep.equal(\r",
+							"        [{\"id\": pm.environment.get(\"valid_load_id_5\"), \"self\": load_url}]\r",
+							"        );\r",
+							"    pm.expect(pm.response.json()[\"self\"]).to.eq(self_url);\r",
+							"    pm.expect(pm.response.json()[\"owner\"][\"id\"]).to.eq(pm.environment.get(\"user_id1\"));\r",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "{{jwt1}}",
+							"type": "string"
+						}
+					]
+				},
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "{{root}}/boats/{{valid_boat_id_5}}",
+					"host": [
+						"{{root}}"
+					],
+					"path": [
+						"boats",
+						"{{valid_boat_id_5}}"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Get Load 5 with Boat: 200",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"200 status code\", function () {\r",
+							"    //Check for success 200 response code\r",
+							"    pm.response.to.have.status(200);\r",
+							"});\r",
+							"\r",
+							"pm.test(\"content is valid\", function () {\r",
+							"    pm.expect(pm.response.json()[\"volume\"]).to.eq(5);\r",
+							"    pm.expect(pm.response.json()[\"weight\"]).to.eq(5);\r",
+							"    pm.expect(pm.response.json()[\"item\"]).to.eq(\"Items\");\r",
+							"    const self_url = pm.environment.get(\"root\") + \"/loads/\" + pm.response.json()[\"id\"];\r",
+							"    const boat_url = pm.environment.get(\"root\") + \"/boats/\" + pm.environment.get(\"valid_boat_id_5\");\r",
+							"    pm.expect(pm.response.json()[\"boat\"]).to.deep.equal(\r",
+							"        {\"id\": pm.environment.get(\"valid_boat_id_5\"), \"self\": boat_url}\r",
+							"        );\r",
+							"    pm.expect(pm.response.json()[\"self\"]).to.eq(self_url);\r",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "{{jwt1}}",
+							"type": "string"
+						}
+					]
+				},
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "{{root}}/loads/{{valid_load_id_5}}",
+					"host": [
+						"{{root}}"
+					],
+					"path": [
+						"loads",
+						"{{valid_load_id_5}}"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Remove Load 5 from Boat 5 Invalid JWT: 401",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"401 status code\", function () {\r",
+							"    pm.response.to.have.status(401);\r",
+							"});\r",
+							"\r",
+							"pm.test(\"content is valid\", function () {\r",
+							"    pm.expect(pm.response.json()[\"Error\"]).to.eq(\"The request has an invalid JWT\");\r",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "{{invalid_token}}",
+							"type": "string"
+						}
+					]
+				},
+				"method": "DELETE",
+				"header": [],
+				"url": {
+					"raw": "{{root}}/boats/{{valid_boat_id_5}}/loads/{{valid_load_id_5}}",
+					"host": [
+						"{{root}}"
+					],
+					"path": [
+						"boats",
+						"{{valid_boat_id_5}}",
+						"loads",
+						"{{valid_load_id_5}}"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Remove Load 5 from Boat 5 (User 2): 403",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"403 status code\", function () {\r",
+							"    pm.response.to.have.status(403);\r",
+							"});\r",
+							"\r",
+							"pm.test(\"content is valid\", function () {\r",
+							"    pm.expect(pm.response.json()[\"Error\"]).to.eq(\"User does not own boat with this boat_id\");\r",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "{{jwt2}}",
+							"type": "string"
+						}
+					]
+				},
+				"method": "DELETE",
+				"header": [],
+				"url": {
+					"raw": "{{root}}/boats/{{valid_boat_id_5}}/loads/{{valid_load_id_5}}",
+					"host": [
+						"{{root}}"
+					],
+					"path": [
+						"boats",
+						"{{valid_boat_id_5}}",
+						"loads",
+						"{{valid_load_id_5}}"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Remove Load DNE from Boat DNE: 404",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"404 status code\", function () {\r",
+							"    pm.response.to.have.status(404);\r",
+							"});\r",
+							"\r",
+							"pm.test(\"content is valid\", function () {\r",
+							"    pm.expect(pm.response.json()[\"Error\"]).to.eq(\"No boat with this boat_id is carrying the load with this load_id\");\r",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "{{jwt2}}",
+							"type": "string"
+						}
+					]
+				},
+				"method": "DELETE",
+				"header": [],
+				"url": {
+					"raw": "{{root}}/boats/{{invalid_boat_id}}/loads/{{invalid_load_id}}",
+					"host": [
+						"{{root}}"
+					],
+					"path": [
+						"boats",
+						"{{invalid_boat_id}}",
+						"loads",
+						"{{invalid_load_id}}"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Remove Load 5 from Boat 5 (User 1): 204",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"204 status code\", function () {\r",
+							"    pm.response.to.have.status(204);\r",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "{{jwt1}}",
+							"type": "string"
+						}
+					]
+				},
+				"method": "DELETE",
+				"header": [],
+				"url": {
+					"raw": "{{root}}/boats/{{valid_boat_id_5}}/loads/{{valid_load_id_5}}",
+					"host": [
+						"{{root}}"
+					],
+					"path": [
+						"boats",
+						"{{valid_boat_id_5}}",
+						"loads",
+						"{{valid_load_id_5}}"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Get Boat 5 (User 1): 200",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"200 status code\", function () {\r",
+							"    //Check for success 200 response code\r",
+							"    pm.response.to.have.status(200);\r",
+							"});\r",
+							"\r",
+							"pm.test(\"content is valid\", function () {\r",
+							"    pm.expect(pm.response.json()[\"name\"]).to.eq(\"Boat Five\");\r",
+							"    pm.expect(pm.response.json()[\"type\"]).to.eq(\"Boat\");\r",
+							"    pm.expect(pm.response.json()[\"length\"]).to.eq(5);\r",
+							"    pm.expect(pm.response.json()[\"loads\"]).to.deep.equal([]);\r",
+							"    const self_url = pm.environment.get(\"root\") + \"/boats/\" + pm.response.json()[\"id\"];\r",
+							"    pm.expect(pm.response.json()[\"self\"]).to.eq(self_url);\r",
+							"    pm.expect(pm.response.json()[\"owner\"][\"id\"]).to.eq(pm.environment.get(\"user_id1\"));\r",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "{{jwt1}}",
+							"type": "string"
+						}
+					]
+				},
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "{{root}}/boats/{{valid_boat_id_5}}",
+					"host": [
+						"{{root}}"
+					],
+					"path": [
+						"boats",
+						"{{valid_boat_id_5}}"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Get Load 5: 200",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"200 status code\", function () {\r",
+							"    //Check for success 200 response code\r",
+							"    pm.response.to.have.status(200);\r",
+							"});\r",
+							"\r",
+							"pm.test(\"content is valid\", function () {\r",
+							"    pm.expect(pm.response.json()[\"volume\"]).to.eq(5);\r",
+							"    pm.expect(pm.response.json()[\"weight\"]).to.eq(5);\r",
+							"    pm.expect(pm.response.json()[\"item\"]).to.eq(\"Items\");\r",
+							"    pm.expect(pm.response.json()[\"boat\"]).to.eq(null);\r",
+							"    const self_url = pm.environment.get(\"root\") + \"/loads/\" + pm.response.json()[\"id\"];\r",
+							"    pm.expect(pm.response.json()[\"self\"]).to.eq(self_url);\r",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "{{jwt1}}",
+							"type": "string"
+						}
+					]
+				},
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "{{root}}/loads/{{valid_load_id_5}}",
+					"host": [
+						"{{root}}"
+					],
+					"path": [
+						"loads",
+						"{{valid_load_id_5}}"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Add Load 3 to Boat 5 (User 1): 204",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"204 status code\", function () {\r",
+							"    pm.response.to.have.status(204);\r",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "{{jwt1}}",
+							"type": "string"
+						}
+					]
+				},
+				"method": "PUT",
+				"header": [],
+				"url": {
+					"raw": "{{root}}/boats/{{valid_boat_id_5}}/loads/{{valid_load_id_3}}",
+					"host": [
+						"{{root}}"
+					],
+					"path": [
+						"boats",
+						"{{valid_boat_id_5}}",
+						"loads",
+						"{{valid_load_id_3}}"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Add Load 4 to Boat 5 (User 1): 204",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"204 status code\", function () {\r",
+							"    pm.response.to.have.status(204);\r",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "{{jwt1}}",
+							"type": "string"
+						}
+					]
+				},
+				"method": "PUT",
+				"header": [],
+				"url": {
+					"raw": "{{root}}/boats/{{valid_boat_id_5}}/loads/{{valid_load_id_4}}",
+					"host": [
+						"{{root}}"
+					],
+					"path": [
+						"boats",
+						"{{valid_boat_id_5}}",
+						"loads",
+						"{{valid_load_id_4}}"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Get Boat 5 (User 1): 200",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"200 status code\", function () {\r",
+							"    //Check for success 200 response code\r",
+							"    pm.response.to.have.status(200);\r",
+							"});\r",
+							"\r",
+							"pm.test(\"content is valid\", function () {\r",
+							"    pm.expect(pm.response.json()[\"name\"]).to.eq(\"Boat Five\");\r",
+							"    pm.expect(pm.response.json()[\"type\"]).to.eq(\"Boat\");\r",
+							"    pm.expect(pm.response.json()[\"length\"]).to.eq(5);\r",
+							"    const self_url = pm.environment.get(\"root\") + \"/boats/\" + pm.response.json()[\"id\"];\r",
+							"    pm.expect(pm.response.json()[\"self\"]).to.eq(self_url);\r",
+							"    pm.expect(pm.response.json()[\"owner\"][\"id\"]).to.eq(pm.environment.get(\"user_id1\"));\r",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "{{jwt1}}",
+							"type": "string"
+						}
+					]
+				},
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "{{root}}/boats/{{valid_boat_id_5}}",
+					"host": [
+						"{{root}}"
+					],
+					"path": [
+						"boats",
+						"{{valid_boat_id_5}}"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Delete Boat 5 (User 1): 204",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"204 status code\", function () {\r",
+							"    pm.response.to.have.status(204);\r",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "{{jwt1}}",
+							"type": "string"
+						}
+					]
+				},
+				"method": "DELETE",
+				"header": [],
+				"url": {
+					"raw": "{{root}}/boats/{{valid_boat_id_5}}",
+					"host": [
+						"{{root}}"
+					],
+					"path": [
+						"boats",
+						"{{valid_boat_id_5}}"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Get all Loads after Delete: 200 Copy",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"200 status code\", function () {\r",
+							"    //Check for success 200 response code\r",
+							"    pm.response.to.have.status(200);\r",
+							"});\r",
+							"\r",
+							"const loads = pm.response.json()[\"loads\"];\r",
+							"\r",
+							"pm.test(\"content is valid\", function () {\r",
+							"    //Check if the content is valid\r",
+							"    pm.expect(pm.response.json()[\"total\"]).to.eq(5);\r",
+							"    pm.expect(loads.length).to.eq(5);\r",
+							"    //pm.expect(pm.response.json()).to.have.property(\"next\");\r",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "{{jwt2}}",
+							"type": "string"
+						}
+					]
+				},
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "{{root}}/loads",
+					"host": [
+						"{{root}}"
+					],
+					"path": [
+						"loads"
+					]
+				}
+			},
+			"response": []
+		}
+	]
+}
