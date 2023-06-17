@@ -77,7 +77,8 @@ app.get('/profile', requiresAuth(), (req, res) => {
   <html>
   <head>
       <meta charset="utf-8">
-      <title>User Info - HW7</title>
+      <title>User Info</title>
+      <link rel="stylesheet" href="styles.css">
   </head>
   <body>
       <h1>User Info</h1>
