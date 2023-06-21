@@ -63,9 +63,11 @@ function get_user(sub_id){
 
 /* ------------- Begin Users Controller Functions ------------- */
 
-app.get('/', (req, res) => {
-  res.sendFile(path.join(__dirname, 'public/index.html'));
-});
+// app.get('/', (req, res) => {
+//   res.sendFile(path.join(__dirname, 'public/index.html'));
+// });
+
+app.use(express.static(path.join(__dirname, 'public')));
 
 app.get('/login', (req, res) => {
   res.oidc.login({ returnTo: '/profile' })
@@ -78,7 +80,7 @@ app.get('/profile', requiresAuth(), (req, res) => {
   <head>
       <meta charset="utf-8">
       <title>User Info</title>
-      <link rel="stylesheet" href="styles.css">
+      <link rel="stylesheet" href="/css/styles.css">
   </head>
   <body>
       <h1>User Info</h1>
