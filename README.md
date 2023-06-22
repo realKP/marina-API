@@ -37,24 +37,23 @@ The Unique ID is only necessary for testing purposes, such as those described in
 The following are excerpts from the [API specifications document](API-specifications.pdf "API-specifications.pdf") described previously.
 
 **Example of Boat Data Model**
-![Screenshot of table describing the data types and requirements for boat entities](https://github.com/realKP/marina-API/assets/76978772/7ce21b8e-b605-4d4c-80a8-6cd947b600c7)
+![Screenshot of table describing the data types and requirements for boat entities](https://github.com/realKP/marina-API/assets/76978772/699d5036-416b-4c93-be40-85a20e4549ac)
 
 **Example of Boat POST Request Body**
-![Screenshot of JSON request body to create a boat entity](https://github.com/realKP/marina-API/assets/76978772/3da66a6f-9240-46fe-9525-d6e9601be593)
+![Screenshot of JSON request body to create a boat entity](https://github.com/realKP/marina-API/assets/76978772/2dd6054d-93c4-4b81-b7ec-4e7a603e9f94)
 
 **Example of Response Statuses for Boat POST Request**
-![Screenshot of possible response statuses for creating a boat entity](https://github.com/realKP/marina-API/assets/76978772/1ff399b8-9ae4-40ea-928f-c501dc8addd4)
+![Screenshot of possible response statuses for creating a boat entity](https://github.com/realKP/marina-API/assets/76978772/e8e33e4b-9a57-4040-ae50-3609bf06dab6)
 
 **Examples of Responses for Boat POST Request**
-![Screenshot of successful and unsuccessful responses for creating a boat entity](https://github.com/realKP/marina-API/assets/76978772/66b3eeef-cc43-4eef-a680-a2ac5c15e52d)
+![Screenshot of successful and unsuccessful responses for creating a boat entity](https://github.com/realKP/marina-API/assets/76978772/0f1be8ce-e45e-46b4-9f5e-f9a5f3e65161)
 
 ## Testing <a name="testing"></a>
 This project was created through test-driven development (TDD) using the API platform [Postman](https://www.postman.com/). The [testing collection](testing/marina-rest-api.postman_collection.json "marina-rest-api.postman_collection.json") contains over 60 requests with each request containing multiple unit tests.
 
 For example, the following demonstrates the GET request and respective tests for the information on a particular load:
-![Screenshot of a GET load request path and respective tests](https://github.com/realKP/marina-API/assets/76978772/34396b66-d1ad-41c6-b39a-500e1aeca955)
+![Screenshot of a GET load request path and respective tests](https://github.com/realKP/marina-API/assets/76978772/5fc0aea3-e33e-438c-9502-36e9b1d0a909)
 
 To run this test collection successfully yourself, you must use the [Postman environment](testing/marina-rest-api.postman_environment.json "marina-rest-api.postman_environment.json") containing the necessary variables. The only modifications that need to be made are to replace the values of variables `user_id1` and `user_id2` with the unique ID's of two user accounts that you have created (covered in the [Usage section](#usage "Usage")) as well as their corresponding JWT's for the values of variables `jwt1` and `jwt2`. This is shown below:
 
-![Screenshot of Postman environment variables](https://github.com/realKP/marina-API/assets/76978772/0bc3508e-14e9-4036-bc9c-e115ea198666)
-
+![Screenshot of Postman environment variables](https://github.com/realKP/marina-API/assets/76978772/cde41bf9-b44f-4591-a660-83ec60a524d3)
