@@ -54,7 +54,7 @@ This project was created through test-driven development (TDD) using the API pla
 For example, the following demonstrates the GET request and respective tests for the information on a particular load:
 ![Screenshot of a GET load request path and respective tests](https://github.com/realKP/marina-API/assets/76978772/34396b66-d1ad-41c6-b39a-500e1aeca955)
 
-To run this test collection successfully yourself, you must use the [Postman environment](testing/marina-rest-api.postman_environment.json "marina-rest-api.postman_environment.json") containing the necessary variables. The only modifications that need to be made are to replace the values of variables `user_id1` and `user_id2` with the user ID's of two user accounts that you have created (covered in the [Usage section](#usage "Usage")) as well as their corresponding JWT's for variables `jwt1` and `jwt2`. This is shown below:
+To run this test collection successfully yourself, you must use the [Postman environment](testing/marina-rest-api.postman_environment.json "marina-rest-api.postman_environment.json") containing the necessary variables. The only modifications that need to be made are to replace the values of variables `user_id1` and `user_id2` with the unique ID's of two user accounts that you have created (covered in the [Usage section](#usage "Usage")) as well as their corresponding JWT's for the values of variables `jwt1` and `jwt2`. This is shown below:
 
 ![Screenshot of Postman environment variables](https://github.com/realKP/marina-API/assets/76978772/0bc3508e-14e9-4036-bc9c-e115ea198666)
 
